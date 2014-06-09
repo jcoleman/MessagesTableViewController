@@ -106,6 +106,7 @@
  */
 + (CGFloat)neededHeightForBubbleMessageCellWithMessage:(id<JSMessageData>)message
                                         displaysAvatar:(BOOL)displaysAvatar
-                                     displaysTimestamp:(BOOL)displaysTimestamp;
+                                     displaysTimestamp:(BOOL)displaysTimestamp
+                                        tableViewWidth:(CGFloat)tableViewWidth;
 
 @end

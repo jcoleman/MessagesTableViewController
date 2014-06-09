@@ -32,9 +32,9 @@
 - (void)addTextViewObservers;
 - (void)removeTextViewObservers;
 
-+ (CGSize)textSizeForText:(NSString *)txt;
-+ (CGSize)neededSizeForText:(NSString *)text;
-+ (CGFloat)neededHeightForText:(NSString *)text;
++ (CGSize)textSizeForText:(NSString *)txt tableViewWidth:(CGFloat)tableViewWidth;
++ (CGSize)neededSizeForText:(NSString *)text tableViewWidth:(CGFloat)tableViewWidth;
++ (CGFloat)neededHeightForText:(NSString *)text tableViewWidth:(CGFloat)tableViewWidth;
 
 @end
 
@@ -176,7 +176,8 @@
 
 - (CGRect)bubbleFrame
 {
-    CGSize bubbleSize = [JSBubbleView neededSizeForText:self.textView.text];
+    CGFloat tableViewWidth = (self.superview ? self.superview : self).frame.size.width;
+    CGSize bubbleSize = [JSBubbleView neededSizeForText:self.textView.text tableViewWidth:tableViewWidth];
     
     return CGRectIntegral(CGRectMake((self.type == JSBubbleMessageTypeOutgoing ? self.frame.size.width - bubbleSize.width : 0.0f),
                                      kMarginTop,
@@ -208,9 +209,9 @@
 
 #pragma mark - Bubble view
 
-+ (CGSize)textSizeForText:(NSString *)txt
++ (CGSize)textSizeForText:(NSString *)txt tableViewWidth:(CGFloat)tableViewWidth
 {
-    CGFloat maxWidth = [UIScreen mainScreen].applicationFrame.size.width * 0.70f;
+    CGFloat maxWidth = tableViewWidth * 0.70f;
     CGFloat maxHeight = MAX([JSMessageTextView numberOfLinesForMessage:txt],
                          [txt js_numberOfLines]) * [JSMessageInputView textViewLineHeight];
     maxHeight += kJSAvatarImageSize;
@@ -233,17 +234,17 @@
     return CGSizeMake(roundf(stringSize.width), roundf(stringSize.height));
 }
 
-+ (CGSize)neededSizeForText:(NSString *)text
++ (CGSize)neededSizeForText:(NSString *)text tableViewWidth:(CGFloat)tableViewWidth
 {
-    CGSize textSize = [JSBubbleView textSizeForText:text];
+    CGSize textSize = [JSBubbleView textSizeForText:text tableViewWidth:tableViewWidth];
     
 	return CGSizeMake(textSize.width + kBubblePaddingRight,
                       textSize.height + kPaddingTop + kPaddingBottom);
 }
 
-+ (CGFloat)neededHeightForText:(NSString *)text
++ (CGFloat)neededHeightForText:(NSString *)text tableViewWidth:(CGFloat)tableViewWidth
 {
-    CGSize size = [JSBubbleView neededSizeForText:text];
+    CGSize size = [JSBubbleView neededSizeForText:text tableViewWidth:tableViewWidth];
     return size.height + kMarginTop + kMarginBottom;
 }
 
